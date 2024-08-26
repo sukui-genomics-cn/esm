@@ -48,7 +48,7 @@ def _test_esm1b_truncation(alphabet):
 def test_esm1b_alphabet():
     import esm
 
-    _, alphabet = esm.pretrained.esm1b_t33_650M_UR50S()
+    _, alphabet = esm.pretrained.esm2_t33_650M_UR50D()
     _test_esm1b(alphabet)
     _test_esm1b_truncation(alphabet)
 
