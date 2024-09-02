@@ -1,14 +1,13 @@
-# @title ##run **ESMFold**
+import esm
+
 from string import ascii_uppercase, ascii_lowercase
 import hashlib, re, os
 
-import esm
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
 from scipy.special import softmax
 import gc
-
 import py3Dmol
 
 alphabet_list = list(ascii_uppercase + ascii_lowercase)
@@ -136,8 +135,6 @@ def predict(sequence="GWSTELEKHREELKEFLKKEGITNVEIRIDNGRLEVRVEGGTERLKRFLEELRQKLEK
         residue_index_offset=512
     )
     output = to_cpu_and_numpy(output)
-    print(output.keys())
-    print(output)
 
     pdb_str = model.output_to_pdb(output)[0]
     ptm = output["ptm"][0]
@@ -218,15 +215,16 @@ def main():
     sequence = "GWSTELEKHREELKEFLKKEGITNVEIRIDNGRLEVRVEGGTERLKRFLEELRQKLEKKGYTVDIKIE"
     lengths = [len(s) for s in [sequence]]
     pdb_str, output_parse = predict(sequence, jobname="test")
-    print(pdb_str)
 
-    show_pdb(pdb_str, color=color,
-             show_sidechains=show_sidechains,
-             show_mainchains=show_mainchains,
-             Ls=lengths).show()
+    view = show_pdb(
+        pdb_str, color=color,
+        show_sidechains=show_sidechains,
+        show_mainchains=show_mainchains,
+        Ls=lengths).show()
 
     plot_confidence(output_parse, Ls=lengths, dpi=100)
     prefix = "esmfold_predict"
+    # view.png(f'{prefix}_3d_mol.png')
     plt.savefig(f'{prefix}.png', bbox_inches='tight')
     # plt.show()
 
